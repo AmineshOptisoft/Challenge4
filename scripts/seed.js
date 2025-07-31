@@ -1,8 +1,6 @@
 const fs = require('fs')
 const db = require('../lib/db')
 
-const stream = fs.createReadStream('./data/projects.csv')
-
 const createTableSql = `
   CREATE TABLE IF NOT EXISTS project (
     projectId INT PRIMARY KEY,
@@ -18,42 +16,44 @@ const createTableSql = `
     finalBudgetUsd DECIMAL(10, 2)
   )
 `
-let data = ''
 
+// Create table first
 db.query(createTableSql, err => {
   if (err) return console.error('Error creating table:', err)
-  stream.on('data', chunk => {
-    data += chunk.toString()
-
-    const lines = data.split('\n')
-    data = lines.pop()
-
-    lines.forEach((line, index) => {
-      if (index === 0) return
-
-      const values = line.split(',')
-      const parsedValues = values.map(value => {
-        if (value === 'NULL') return null
-        if (!isNaN(value)) return parseFloat(value)
-        return `"${value}"`
-      })
-
-      const insertSql = `INSERT INTO project values (${parsedValues.join(',')})`
-
-      db.query(insertSql, err => {
-        if (err) {
-          console.error('Error inserting Project ID:', values[0], err)
-          process.exit(1)
-        }
-        console.log('Inserted Project ID:', values[0])
-      })
+  console.log('Table created successfully')
+  
+  // Load seed data from CSV
+  const csvData = fs.readFileSync('./data/projects.csv', 'utf8')
+  const lines = csvData.split('\n')
+  
+  // Skip header line
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim()
+    if (!line) continue
+    
+    const values = line.split(',')
+    const parsedValues = values.map(value => {
+      if (value === 'NULL') return null
+      if (!isNaN(value)) return parseFloat(value)
+      return `"${value}"`
     })
-  })
 
-  stream.on('end', () => {
+    const insertSql = `INSERT INTO project VALUES (${parsedValues.join(',')})`
+    
+    db.query(insertSql, err => {
+      if (err) {
+        console.error('Error inserting Project ID:', values[0], err)
+        process.exit(1)
+      }
+      console.log('Inserted Project ID:', values[0])
+    })
+  }
+  
+  // Close database connection after seeding
+  setTimeout(() => {
     db.end(err => {
       if (err) return console.error('Error closing database connection:', err)
-      console.log('Database connection closed')
+      console.log('Database seeding completed')
     })
-  })
+  }, 1000)
 })

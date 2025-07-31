@@ -2,6 +2,7 @@ process.env.NODE_ENV = 'test'
 
 const http = require('http')
 const test = require('tape')
+const servertest = require('servertest')
 const url = require('url')
 const app = require('../lib/app')
 const { createGetRequest, createTestRequest, createDeleteRequest } = require('./helper')
@@ -31,7 +32,20 @@ test('database setup and seeding tests', function (t) {
     })
   })
 
-  t.end()
+  t.test('Database cleanup functionality', function (t) {
+    const db = require('../lib/db')
+    
+    // Test cleanup by deleting and recreating
+    db.query('DELETE FROM project', (err) => {
+      t.error(err, 'No error deleting all projects')
+      
+      db.query('SELECT COUNT(*) as count FROM project', (err, rows) => {
+        t.error(err, 'No error counting after cleanup')
+        t.equal(rows[0].count, 0, 'All projects deleted')
+        t.end()
+      })
+    })
+  })
 })
 
 test('GET /health should return 200', function (t) {

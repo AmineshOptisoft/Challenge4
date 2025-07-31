@@ -23,6 +23,7 @@
     "express-pino-logger": "^7.0.0",
     "healthpoint": "^1.0.0",
     "mysql": "^2.18.1",
+    "mysql2": "^3.14.3",
     "productionize": "^5.0.0",
     "sqlite3": "^5.1.7"
   },

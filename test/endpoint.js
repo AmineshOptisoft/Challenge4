@@ -479,3 +479,40 @@ test('GET /nonexistent should return 404', function (t) {
     t.end()
   })
 })
+
+test('GET /api-conversion should convert specific projects to TTD', function (t) {
+  servertest(server, '/api-conversion', { encoding: 'json' }, (err, res) => {
+    t.error(err, 'No error making request to /api-conversion')
+    t.equal(res.statusCode, 200, 'Status code is 200')
+    
+    const body = res.body
+    t.ok(body.success, 'Response has success field')
+    t.ok(Array.isArray(body.data), 'Response data is an array')
+    t.ok(body.data.length > 0, 'Response contains converted projects')
+    
+    // Check that all specific projects are included
+    const expectedProjects = [
+      'Peking roasted duck Chanel',
+      'Choucroute Cartier', 
+      'Rigua Nintendo',
+      'Llapingacho Instagram'
+    ]
+    
+    const foundProjects = body.data.map(project => project.projectName)
+    
+    expectedProjects.forEach(expectedProject => {
+      t.ok(foundProjects.includes(expectedProject), `Project "${expectedProject}" found in response`)
+    })
+    
+    // Check that each project has TTD conversion
+    body.data.forEach(project => {
+      t.ok(project.finalBudgetTtd, `Project "${project.projectName}" has finalBudgetTtd field`)
+      t.ok(typeof project.finalBudgetTtd === 'number', `Project "${project.projectName}" finalBudgetTtd is number`)
+      t.ok(project.finalBudgetTtd > 0, `Project "${project.projectName}" finalBudgetTtd is positive`)
+      t.ok(project.currency, `Project "${project.projectName}" has currency field`)
+      t.ok(project.finalBudgetUsd, `Project "${project.projectName}" has finalBudgetUsd field`)
+    })
+    
+    t.end()
+  })
+})

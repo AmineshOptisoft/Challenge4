@@ -8,7 +8,7 @@
     "lint-fix": "standard --fix",
     "lint": "standard",
     "deps": "depcheck .",
-    "test": "nyc node test/endpoint.js && npm run deps && npm run lint",
+    "test": "nyc node test/endpoints/index.test.js && npm run deps && npm run lint",
     "db:seed": "NODE_ENV=development node scripts/seed.js"
   },
   "keywords": [],

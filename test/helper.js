@@ -4,6 +4,10 @@ const servertest = require('servertest')
 // Test helper functions
 function createTestRequest (server, endpoint, method, requestBody, callback) {
   const json = JSON.stringify(requestBody)
+  console.log(json,"json==============json")
+  console.log(method,"method==============method")
+  console.log(endpoint,"endpoint==============endpoint")
+  console.log(requestBody,"requestBody==============requestBody")
   const stream = servertest(server, endpoint, {
     method,
     encoding: 'json',

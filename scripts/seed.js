@@ -21,16 +21,16 @@ const createTableSql = `
 db.query(createTableSql, err => {
   if (err) return console.error('Error creating table:', err)
   console.log('Table created successfully')
-  
+
   // Load seed data from CSV
   const csvData = fs.readFileSync('./data/projects.csv', 'utf8')
   const lines = csvData.split('\n')
-  
+
   // Skip header line
   for (let i = 1; i < lines.length; i++) {
     const line = lines[i].trim()
     if (!line) continue
-    
+
     const values = line.split(',')
     const parsedValues = values.map(value => {
       if (value === 'NULL') return null
@@ -39,7 +39,7 @@ db.query(createTableSql, err => {
     })
 
     const insertSql = `INSERT INTO project VALUES (${parsedValues.join(',')})`
-    
+
     db.query(insertSql, err => {
       if (err) {
         console.error('Error inserting Project ID:', values[0], err)
@@ -48,7 +48,7 @@ db.query(createTableSql, err => {
       console.log('Inserted Project ID:', values[0])
     })
   }
-  
+
   // Close database connection after seeding
   setTimeout(() => {
     db.end(err => {

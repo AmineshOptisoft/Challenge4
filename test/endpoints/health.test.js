@@ -34,4 +34,4 @@ test('Health endpoint tests', function (t) {
       t.end()
     })
   })
-}) 
+})

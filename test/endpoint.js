@@ -3,7 +3,6 @@ process.env.NODE_ENV = 'test'
 const http = require('http')
 const test = require('tape')
 const servertest = require('servertest')
-const url = require('url')
 const app = require('../lib/app')
 const { createTestRequest, createGetRequest, createDeleteRequest } = require('./helper')
 
@@ -12,7 +11,7 @@ const server = http.createServer(app)
 test('database setup and seeding tests', function (t) {
   t.test('SQLite table creation', function (t) {
     const db = require('../lib/db')
-    
+
     db.query('SELECT name FROM sqlite_master WHERE type="table" AND name="project"', (err, rows) => {
       t.error(err, 'No error')
       t.ok(rows && rows.length > 0, 'Project table exists')
@@ -22,7 +21,7 @@ test('database setup and seeding tests', function (t) {
 
   t.test('Seed data insertion', function (t) {
     const db = require('../lib/db')
-    
+
     db.query('SELECT COUNT(*) as count FROM project', (err, rows) => {
       t.error(err, 'No error')
       t.ok(rows && rows[0].count > 0, 'Seed data was inserted')
@@ -32,11 +31,11 @@ test('database setup and seeding tests', function (t) {
 
   t.test('Database cleanup functionality', function (t) {
     const db = require('../lib/db')
-    
+
     // Instead of deleting all data, just verify we can delete a specific project
     db.query('DELETE FROM project WHERE projectId = 999999', (err) => {
       t.error(err, 'No error')
-      
+
       db.query('SELECT COUNT(*) as count FROM project WHERE projectId = 999999', (err, rows) => {
         t.error(err, 'No error')
         t.equal(rows[0].count, 0, 'Specific project deleted')
@@ -379,7 +378,6 @@ test('TTD conversion for Llapingacho Instagram', function (t) {
     t.end()
   })
 })
-
 
 // ==================== INTEGRATION TESTS ====================
 

@@ -2,7 +2,7 @@
 const servertest = require('servertest')
 
 // Test helper functions
-function createTestRequest(server, endpoint, method, requestBody, callback) {
+function createTestRequest (server, endpoint, method, requestBody, callback) {
   const json = JSON.stringify(requestBody)
   const stream = servertest(server, endpoint, {
     method,
@@ -15,14 +15,14 @@ function createTestRequest(server, endpoint, method, requestBody, callback) {
   stream.end(json)
 }
 
-function createGetRequest(server, endpoint, callback) {
+function createGetRequest (server, endpoint, callback) {
   servertest(server, endpoint, {
     method: 'GET',
     encoding: 'json'
   }, callback)
 }
 
-function createDeleteRequest(server, endpoint, callback) {
+function createDeleteRequest (server, endpoint, callback) {
   servertest(server, endpoint, {
     method: 'DELETE',
     encoding: 'json'
@@ -30,33 +30,33 @@ function createDeleteRequest(server, endpoint, callback) {
 }
 
 // Assertion helper functions
-function assertSuccessResponse(t, err, res, expectedStatus = 200) {
+function assertSuccessResponse (t, err, res, expectedStatus = 200) {
   t.error(err, 'No error')
   t.equal(res.statusCode, expectedStatus, `Should return ${expectedStatus}`)
 }
 
-function assertErrorResponse(t, err, res, expectedStatus = 400) {
+function assertErrorResponse (t, err, res, expectedStatus = 400) {
   t.error(err, 'No error')
   t.equal(res.statusCode, expectedStatus, `Should return ${expectedStatus}`)
 }
 
-function assertProjectResponse(t, err, res, expectedStatus = 200) {
+function assertProjectResponse (t, err, res, expectedStatus = 200) {
   assertSuccessResponse(t, err, res, expectedStatus)
   t.ok(res.body.projectId, 'Should have projectId')
 }
 
-function assertCurrencyResponse(t, err, res, expectedStatus = 200) {
+function assertCurrencyResponse (t, err, res, expectedStatus = 200) {
   assertSuccessResponse(t, err, res, expectedStatus)
   t.ok(res.body.success, 'Should return success true')
 }
 
-function assertHealthResponse(t, err, res, expectedStatus = 200) {
+function assertHealthResponse (t, err, res, expectedStatus = 200) {
   assertSuccessResponse(t, err, res, expectedStatus)
   t.ok(res.body.ok, 'Should return ok true')
 }
 
 // Test data helper functions
-function createTestProject(projectId = 10001) {
+function createTestProject (projectId = 10001) {
   return {
     projectId,
     projectName: 'Test Project',
@@ -72,7 +72,7 @@ function createTestProject(projectId = 10001) {
   }
 }
 
-function createCurrencyRequest(projectName = 'Humitas Hewlett Packard', year = 2000) {
+function createCurrencyRequest (projectName = 'Humitas Hewlett Packard', year = 2000) {
   return {
     year,
     projectName,
@@ -80,7 +80,7 @@ function createCurrencyRequest(projectName = 'Humitas Hewlett Packard', year = 2
   }
 }
 
-function createUpdateData() {
+function createUpdateData () {
   return {
     projectName: 'Updated Project Name',
     year: 2025,
@@ -107,4 +107,4 @@ module.exports = {
   createTestProject,
   createCurrencyRequest,
   createUpdateData
-} 
+}

@@ -110,4 +110,4 @@ test('Currency endpoint tests', function (t) {
       t.end()
     })
   })
-}) 
+})

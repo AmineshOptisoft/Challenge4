@@ -4,4 +4,4 @@ process.env.NODE_ENV = 'test'
 require('./health.test')
 require('./currency.test')
 require('./projects.test')
-require('./integration.test') 
+require('./integration.test')

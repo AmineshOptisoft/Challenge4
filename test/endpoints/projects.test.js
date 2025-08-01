@@ -7,7 +7,7 @@ const test = require('tape')
 // Internal dependencies
 const app = require('../../lib/app')
 const { createTestRequest, createGetRequest, createDeleteRequest, assertProjectResponse, assertErrorResponse, assertSuccessResponse } = require('../utils/testHelpers')
-const { testProjects, updateData, integrationTestProject } = require('../utils/testData')
+const { testProjects, updateData } = require('../utils/testData')
 
 const server = http.createServer(app)
 
@@ -105,4 +105,4 @@ test('Projects endpoint tests', function (t) {
       t.end()
     })
   })
-}) 
+})
